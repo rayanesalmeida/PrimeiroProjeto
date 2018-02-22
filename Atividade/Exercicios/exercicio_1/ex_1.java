@@ -1,0 +1,16 @@
+import java.util.Scanner;
+
+public class ex_1 {
+	public static void main(String args[]) {
+		Scanner input = new Scanner(System.in);
+		String nome = "";
+		System.out.printf("Informe o nome: ");
+		nome = input.next();
+		System.out.printf("Horas Trabalhadas: ");
+		int horas = input.nextInt();
+		System.out.printf("Valor pago por hora: ");
+		float valor = input.nextFloat();
+		float total = horas * valor;
+		System.out.printf("Valor a ser recebido: %f\n", total);
+	}
+}

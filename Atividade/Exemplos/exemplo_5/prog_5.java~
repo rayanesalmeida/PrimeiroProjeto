@@ -1,0 +1,15 @@
+import java.util.*;
+
+public class prog_5 {
+	public static void main(String args[]) {
+		double area,raio;
+		Scanner teclado = new Scanner(System.in);
+		System.out.printf("Digite seu nome: ");
+		nome = input.next();
+		System.out.printf("\nMeu nome é %s\n", nome);
+		System.out.printf("Digite sua idade: ");
+		int idade = Integer.parseInt(input.next());
+		System.out.printf("\nMinha idade é %d\n", idade);
+		
+	}
+}
