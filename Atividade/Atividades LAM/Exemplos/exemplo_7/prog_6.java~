@@ -1,0 +1,17 @@
+import java.util.Scanner;
+
+public class prog_6 {
+	public static void main(String args[]) {
+		int idade;
+		Scanner input = new Scanner(System.in);
+		System.out.printf("Digite a idade: ");
+		idade = input.nextInt();
+		if(idade < 18) {
+			System.out.println("Não permitido");
+		}
+	   else{
+			System.out.println("Permitido");	   
+	   }
+	   
+	}
+}

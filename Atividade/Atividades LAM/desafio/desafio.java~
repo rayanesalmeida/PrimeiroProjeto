@@ -1,0 +1,21 @@
+import java.util.*;
+
+public class desafio {
+	public static void main(String args[]) {
+		Scanner input = new Scanner(System.in);
+			System.out.print("Informe um número decimal: ");
+			int n = input.nextInt();
+			int binario[] = new int[10];
+			int i;
+			 while (n >= 1){
+			 	for(i=0; i<10; i++){
+					binario[i] = n % 2;
+					++i;		 	
+			 	}
+            n = n / 2;
+			}
+			for(i=0; i<10; i++){
+            	System.out.println(binario[i]);
+        }
+	}
+}
