@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     public void mandaMensagem(View v){
         EditText nome = findViewById(R.id.editText);
         String oNome = nome.getText().toString();
-        if (oNome.matches(" ")){
+        if (oNome.matches("")){
             Toast toast = Toast.makeText(getApplicationContext(),
                             "É preciso digitar um nome...", Toast.LENGTH_SHORT);
             toast.show();
