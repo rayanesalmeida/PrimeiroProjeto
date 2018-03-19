@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import static android.app.PendingIntent.getActivity();
+import static android.app.PendingIntent.getActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = arquivo.edit();
         editor.putString("valor", oValor);
         editor.commit();
+        valor.setText("");
     }
     public void carregar(View v){
         SharedPreferences arquivo = getPreferences(Context.MODE_PRIVATE);
