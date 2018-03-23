@@ -10,6 +10,7 @@ import java.util.Random;
 import android.widget.Toast;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.Intent;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void sorteia(){
         Random r = new Random();
-        num = r.nextInt(1000) + 1;
+        //num = r.nextInt(1000) + 1;
+        num = 10;
     }
 
     public void jogar(View v){
@@ -58,7 +60,14 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("placar", strPlacar);
         editor.commit();
 
+        //Mandando para outra Activity
 
+        Intent i = new Intent(MainActivity.this, Placar.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("nome", strPlacar);
+        i.putExtras(bundle);
+        startActivity(i);
 
 
         /*if (num == n){
