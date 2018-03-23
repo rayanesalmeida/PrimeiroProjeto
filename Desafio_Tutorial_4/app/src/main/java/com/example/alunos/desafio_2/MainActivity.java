@@ -26,8 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void sorteia(){
         Random r = new Random();
-        //num = r.nextInt(1000) + 1;
-        num = 10;
+        num = r.nextInt(1000) + 1;
     }
 
     public void jogar(View v){
@@ -37,19 +36,22 @@ public class MainActivity extends AppCompatActivity {
 
         TextView resposta = (TextView) findViewById(R.id.str_resp);
 
-        while(num != n){
-            if(n < num){
+        while(num != n) {
+            if (n < num) {
+                tentativas++;
                 Toast toast = Toast.makeText(MainActivity.this,
                         "Seu palpite foi MENOR que o número sorteado!", Toast.LENGTH_SHORT);
                 toast.show();
+                userInput.setText("");
                 return;
-            }else if(n > num){
+            } else if (n > num) {
+                tentativas++;
                 Toast toast = Toast.makeText(MainActivity.this,
                         "Seu palpite foi MAIOR que o número sorteado!", Toast.LENGTH_SHORT);
                 toast.show();
                 return;
+                //userInput.setText("");
             }
-            tentativas++;
         }
         //Salvando placar
         int placar = 1000 - tentativas;
@@ -65,27 +67,8 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, Placar.class);
 
         Bundle bundle = new Bundle();
-        bundle.putString("nome", strPlacar);
+        bundle.putString("placar", strPlacar);
         i.putExtras(bundle);
         startActivity(i);
-
-
-        /*if (num == n){
-            resposta.setText(getResources().getString(R.string.str_resp1).toString());
-            userInput.setText("");
-            //Log.i("Debug: ",getResources().getString(R.string.str_resp1).toString());
-        }
-        else if(tentativas == 3){
-            resposta.setText(getResources().getString(R.string.str_resp3).toString());
-            userInput.setText("");
-            sorteia();
-            tentativas = 0;
-        }
-        else{
-            resposta.setText(getResources().getString(R.string.str_resp2).toString());
-            userInput.setText("");
-            //Log.i("Debug: ", getResources().getString(R.string.str_resp2).toString());
-            tentativas++;
-        }*/
     }
 }
