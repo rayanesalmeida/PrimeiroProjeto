@@ -1,10 +1,13 @@
 package com.example.alunos.myapplication.model;
 
+import android.os.Parcelable;
+import android.os.Parcel;
+
 /**
  * Created by alunos on 23/03/18.
  */
 
-public class Pessoa {
+public class Pessoa implements Parcelable{
 
     private String nome;
     private String telefone;
@@ -13,7 +16,7 @@ public class Pessoa {
     public Pessoa(String nome, String telefone, int idImagem) {
         this.nome = nome;
         this.telefone = telefone;
-        this.imagem = idImagem
+        this.imagem = idImagem;
     }
 
     public String getNome(){
@@ -24,7 +27,7 @@ public class Pessoa {
         this.nome = nome;
     }
 
-    public void getTelefone(){
+    public String getTelefone(){
         return telefone;
     }
 
@@ -40,4 +43,38 @@ public class Pessoa {
         this.imagem = id;
     }
 
-}
+    protected Pessoa(Parcel in){
+        nome = in.readString();
+        telefone = in.readString();
+        imagem = in.readInt();
+    }
+
+    @Override
+    public int describeContents(){
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nome);
+        dest.writeString(telefone);
+        dest.writeInt(imagem);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Pessoa> CREATOR =
+            new Parcelable.Creator<Pessoa>(){
+                @Override
+                public Pessoa createFromParcel(Parcel in){
+                return new Pessoa(in);
+                }
+
+                @Override
+                public Pessoa[] newArray(int size) {
+                    return new Pessoa[size];
+                }
+            };
+        }
+
+
+

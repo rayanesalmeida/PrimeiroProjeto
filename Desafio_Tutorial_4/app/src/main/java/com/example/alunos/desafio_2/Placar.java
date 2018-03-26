@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.content.Context;
+import android.widget.Toast;
 
 public class Placar extends AppCompatActivity {
 
@@ -20,5 +21,10 @@ public class Placar extends AppCompatActivity {
         String strPlacar = pacote.getString("placar");
         TextView txtPlacar = (TextView) findViewById(R.id.txtPlacar);
         txtPlacar.setText(strPlacar);
+
+        Toast toast = Toast.makeText(Placar.this,
+                "Você Acertou!", Toast.LENGTH_SHORT);
+        toast.show();
+        return;
     }
 }

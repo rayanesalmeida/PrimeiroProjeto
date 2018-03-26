@@ -16,6 +16,8 @@ import android.content.Intent;
 public class MainActivity extends AppCompatActivity {
     int num;
     int tentativas = 0;
+    int placar = 1000;
+    int jogadas = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +26,20 @@ public class MainActivity extends AppCompatActivity {
         sorteia();
     }
 
-    public void sorteia(){
+    public void sorteia() {
         Random r = new Random();
-        num = r.nextInt(1000) + 1;
+        //num = r.nextInt(1000) + 1;
+        num = 10;
     }
 
-    public void jogar(View v){
+    public void jogar(View v) {
         EditText userInput = findViewById(R.id.editText);
         String teste = userInput.getText().toString();
         int n = Integer.parseInt(teste);
 
         TextView resposta = (TextView) findViewById(R.id.str_resp);
 
-        while(num != n) {
+        while (num != n) {
             if (n < num) {
                 tentativas++;
                 Toast toast = Toast.makeText(MainActivity.this,
@@ -49,12 +52,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(MainActivity.this,
                         "Seu palpite foi MAIOR que o número sorteado!", Toast.LENGTH_SHORT);
                 toast.show();
+                userInput.setText("");
                 return;
-                //userInput.setText("");
             }
         }
+
         //Salvando placar
-        int placar = 1000 - tentativas;
+        placar = 1000 - tentativas;
         String strPlacar = Integer.toString(placar);
         SharedPreferences arquivo = getPreferences(Context.MODE_PRIVATE);
 
@@ -63,12 +67,31 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
 
         //Mandando para outra Activity
-
         Intent i = new Intent(MainActivity.this, Placar.class);
 
         Bundle bundle = new Bundle();
         bundle.putString("placar", strPlacar);
         i.putExtras(bundle);
         startActivity(i);
+    }
+
+    public void reiniciar(View v){
+        sorteia();
+        //EditText userInput = findViewById(R.id.editText);
+        //userInput.setText("");
+        placar = 1000;
+        tentativas = 0;
+
+    }
+
+    public void placar(){
+        //Salvando placar
+        placar = 1000 - tentativas;
+        String strPlacar = Integer.toString(placar);
+        SharedPreferences arquivo = getPreferences(Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = arquivo.edit();
+        editor.putString("placar", strPlacar);
+        editor.commit();
     }
 }
