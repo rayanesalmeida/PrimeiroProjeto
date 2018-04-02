@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import android.widget.Toast;
 import android.content.Context;
@@ -17,7 +20,10 @@ public class MainActivity extends AppCompatActivity {
     int num;
     int tentativas = 0;
     int placar = 1000;
+    int ranking[] =  new int[];
     int jogadas = 0;
+
+    ArrayList<HashMap<Integer, Integer>> valores = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,65 +39,85 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void jogar(View v) {
+        jogadas = 1;
         EditText userInput = findViewById(R.id.editText);
         String teste = userInput.getText().toString();
         int n = Integer.parseInt(teste);
 
-        TextView resposta = (TextView) findViewById(R.id.str_resp);
+        if (n < num) {
+            tentativas++;
+            Toast toast = Toast.makeText(MainActivity.this,
+                    "Seu palpite foi MENOR que o número sorteado!", Toast.LENGTH_SHORT);
+            toast.show();
+            userInput.setText("");
+            return;
+        } else if (n > num) {
+            tentativas++;
+            Toast toast = Toast.makeText(MainActivity.this,
+                    "Seu palpite foi MAIOR que o número sorteado!", Toast.LENGTH_SHORT);
+            toast.show();
+            userInput.setText("");
+            return;
+        } else {
+            placar = 1000 - tentativas;
+            String strPlacar = Integer.toString(placar);
+            Toast toast = Toast.makeText(MainActivity.this,
+                    "Parabéns! Você ganhou", Toast.LENGTH_SHORT);
+            toast.show();
+            userInput.setText("");
+            return;
 
-        while (num != n) {
-            if (n < num) {
-                tentativas++;
-                Toast toast = Toast.makeText(MainActivity.this,
-                        "Seu palpite foi MENOR que o número sorteado!", Toast.LENGTH_SHORT);
-                toast.show();
-                userInput.setText("");
-                return;
-            } else if (n > num) {
-                tentativas++;
-                Toast toast = Toast.makeText(MainActivity.this,
-                        "Seu palpite foi MAIOR que o número sorteado!", Toast.LENGTH_SHORT);
-                toast.show();
-                userInput.setText("");
-                return;
+            txtResultado.setText(strPlacar);
+
+            /*//Salvando placar
+            placar = 1000 - tentativas;
+            String strPlacar = Integer.toString(placar);
+            SharedPreferences arquivo = getPreferences(Context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = arquivo.edit();
+            editor.putString("placar", strPlacar);
+            editor.commit();
+
+            //Mandando para outra Activity
+            Intent i = new Intent(MainActivity.this, Placar.class);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("placar", strPlacar);
+            i.putExtras(bundle);
+            startActivity(i);
+
+            for (int i = 0; i < 5; i++){
+                HashMap<Integer, Integer> item = new HashMap<>();
+                item.put("ranking", ranking[i]);
+                valores.add(item);
             }
+
+            valores.add();
+        }*/
         }
-
-        //Salvando placar
-        placar = 1000 - tentativas;
-        String strPlacar = Integer.toString(placar);
-        SharedPreferences arquivo = getPreferences(Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = arquivo.edit();
-        editor.putString("placar", strPlacar);
-        editor.commit();
-
-        //Mandando para outra Activity
-        Intent i = new Intent(MainActivity.this, Placar.class);
-
-        Bundle bundle = new Bundle();
-        bundle.putString("placar", strPlacar);
-        i.putExtras(bundle);
-        startActivity(i);
     }
 
     public void reiniciar(View v){
         sorteia();
-        //EditText userInput = findViewById(R.id.editText);
-        //userInput.setText("");
         placar = 1000;
         tentativas = 0;
-
     }
 
-    public void placar(){
-        //Salvando placar
-        placar = 1000 - tentativas;
+    /*public void placar(View v){
+        //placar = 1000 - tentativas;
         String strPlacar = Integer.toString(placar);
         SharedPreferences arquivo = getPreferences(Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = arquivo.edit();
         editor.putString("placar", strPlacar);
         editor.commit();
-    }
+
+        for(int i = 0; i < 5; i++){
+            Intent it = new Intent(MainActivity.this, Ranking.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("placar", strPlacar);
+            it.putExtras(bundle);
+            startActivity(it);
+        }
+    }*/
 }
