@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         ListView lista = findViewById(R.id.listView);
 
-        ArrayList<HashMap<String, String>>valores = new ArrayList<>();
+        ArrayList<HashMap<String, String>> valores = new ArrayList<>();
         for (int i = 0; i < nomes.length; i++){
             HashMap<String, String> item = new HashMap<>();
             item.put("nome", nomes[i]);
