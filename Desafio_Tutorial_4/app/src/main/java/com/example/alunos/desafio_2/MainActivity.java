@@ -6,118 +6,146 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 import android.widget.Toast;
+import android.widget.Button;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.Intent;
 
+import org.apache.commons.collections4.queue.CircularFifoQueue;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     int num;
-    int tentativas = 0;
-    int placar = 1000;
-    int ranking[] =  new int[];
-    int jogadas = 0;
-
-    ArrayList<HashMap<Integer, Integer>> valores = new ArrayList<>();
+    int tentativas;
+    int highestScore;
+    CircularFifoQueue <String> hist;
+    final int Idle = 0;
+    final int Reset = 1;
+    int estado;
+    Random r = new Random();
+    private EditText userInput;
+    private TextView resposta;
+    private Button btnAdiv;
+    private SharedPreferences arquivo;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sorteia();
-    }
 
-    public void sorteia() {
-        Random r = new Random();
         //num = r.nextInt(1000) + 1;
         num = 10;
+
+        userInput = (EditText) findViewById(R.id.editText);
+        resposta = (TextView) findViewById(R.id.str_resp);
+        btnAdiv = (Button) findViewById(R.id.btnAdiv);
+        estado = Idle;
+        hist = new CircularFifoQueue<>(5);
+        arquivo = getPreferences(Context.MODE_PRIVATE);
+        highestScore = arquivo.getInt(getResources().getString(R.string.highestScoreKey), 0);
+        for (int i = 0; i < 5; i++){
+            String chave, valor;
+            chave = getResources().getString(R.string.historicoKey) + Integer.toString(i);
+            valor = arquivo.getString(chave, "0");
+            Log.d(chave, valor);
+            hist.add(valor);
+        }
     }
 
     public void jogar(View v) {
-        jogadas = 1;
-        EditText userInput = findViewById(R.id.editText);
+        int n;
         String teste = userInput.getText().toString();
-        int n = Integer.parseInt(teste);
-
-        if (n < num) {
-            tentativas++;
+        if (teste.matches("") && estado != Reset){
             Toast toast = Toast.makeText(MainActivity.this,
-                    "Seu palpite foi MENOR que o número sorteado!", Toast.LENGTH_SHORT);
+                    "Digite um número!", Toast.LENGTH_SHORT);
             toast.show();
-            userInput.setText("");
-            return;
-        } else if (n > num) {
-            tentativas++;
-            Toast toast = Toast.makeText(MainActivity.this,
-                    "Seu palpite foi MAIOR que o número sorteado!", Toast.LENGTH_SHORT);
-            toast.show();
-            userInput.setText("");
-            return;
-        } else {
-            placar = 1000 - tentativas;
-            String strPlacar = Integer.toString(placar);
-            Toast toast = Toast.makeText(MainActivity.this,
-                    "Parabéns! Você ganhou", Toast.LENGTH_SHORT);
-            toast.show();
-            userInput.setText("");
-            return;
-
-            txtResultado.setText(strPlacar);
-
-            /*//Salvando placar
-            placar = 1000 - tentativas;
-            String strPlacar = Integer.toString(placar);
-            SharedPreferences arquivo = getPreferences(Context.MODE_PRIVATE);
-
-            SharedPreferences.Editor editor = arquivo.edit();
-            editor.putString("placar", strPlacar);
-            editor.commit();
-
-            //Mandando para outra Activity
-            Intent i = new Intent(MainActivity.this, Placar.class);
-
-            Bundle bundle = new Bundle();
-            bundle.putString("placar", strPlacar);
-            i.putExtras(bundle);
-            startActivity(i);
-
-            for (int i = 0; i < 5; i++){
-                HashMap<Integer, Integer> item = new HashMap<>();
-                item.put("ranking", ranking[i]);
-                valores.add(item);
+        } else{
+            switch (estado){
+                case Idle:
+                    n = Integer.parseInt(teste);
+                    tentativas++;
+                    if( n == num){
+                        verificaHigh(tentativas);
+                        hist.add(Integer.toString(tentativas));
+                        editor = arquivo.edit();
+                        editor.putInt(getResources().getString(R.string.highestScoreKey),highestScore);
+                        for(int i = 0; i < hist.size(); i++){
+                            String chave, valor;
+                            chave = getResources().getString(R.string.historicoKey) + Integer.toString(i);
+                            valor = hist.get(i);
+                            editor.putString(chave, valor);
+                            Log.d(chave, valor);
+                        }
+                        editor.commit();
+                        resposta.setText(getResources().getString(R.string.msgWin));
+                        btnAdiv.setText(getResources().getString(R.string.lblButtonJogado));
+                        estado = Reset;
+                    } else if (n > num) {
+                        estado = Idle;
+                        Toast toast = Toast.makeText(MainActivity.this,
+                                "Seu palpite foi MAIOR que o número sorteado!", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    } else{
+                        estado = Idle;
+                        Toast toast = Toast.makeText(MainActivity.this,
+                            "Seu palpite foi MENOR que o número sorteado!", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
+                break;
+                case Reset:
+                    num = r.nextInt(10) +1;
+                    tentativas = 0;
+                    resposta.setText("");
+                    btnAdiv.setText(getResources().getString(R.string.lblButton));
+                    estado = Idle;
+                    break;
+                default:
             }
+        }
+        userInput.setText("");
+    }
 
-            valores.add();
-        }*/
+    public void placar(){
+        Intent intent = new Intent(getApplicationContext(), Placar.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(getResources().getString(R.string.highestScoreKey), highestScore);
+        for(int i = 0; i < 5; ++i){
+            String chave, valor;
+            chave = getResources().getString(R.string.historicoKey) + Integer.toString(i);
+            valor = hist.get(i);
+            bundle.putString(chave, valor);
+            Log.d(chave, valor);
+        }
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    private void verificaHigh(int valor){
+        if (highestScore == 0){
+            highestScore = valor;
+        }else{
+            highestScore = valor < highestScore ? valor : highestScore;
         }
     }
 
-    public void reiniciar(View v){
-        sorteia();
-        placar = 1000;
-        tentativas = 0;
+    @Override
+    protected void onSaveInstanceState(Bundle estadoASalvar){
+        super.onSaveInstanceState(estadoASalvar);
+        estadoASalvar.putInt("num", num);
+        estadoASalvar.putInt("tentativas", tentativas);
+        estadoASalvar.putInt("estado", estado);
     }
 
-    /*public void placar(View v){
-        //placar = 1000 - tentativas;
-        String strPlacar = Integer.toString(placar);
-        SharedPreferences arquivo = getPreferences(Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = arquivo.edit();
-        editor.putString("placar", strPlacar);
-        editor.commit();
-
-        for(int i = 0; i < 5; i++){
-            Intent it = new Intent(MainActivity.this, Ranking.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("placar", strPlacar);
-            it.putExtras(bundle);
-            startActivity(it);
-        }
-    }*/
+    @Override
+    protected void onRestoreInstanceState(Bundle estadoSalvo){
+        super.onRestoreInstanceState(estadoSalvo);
+        estado = estadoSalvo.getInt("estado", Idle);
+        tentativas = estadoSalvo.getInt("tentativas", 0);
+        num = estadoSalvo.getInt("num", r.nextInt(10) + 1);
+    }
 }
