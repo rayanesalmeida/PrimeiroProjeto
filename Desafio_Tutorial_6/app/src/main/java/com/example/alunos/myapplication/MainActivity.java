@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.net.Uri;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -55,8 +56,11 @@ public class MainActivity extends AppCompatActivity
             //usando uma notificacao (objeto Toast)
             if(result.getContents() == null) {
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
-            }else{
-                //Em caso positivo, vamos tratar o resultado
+            }else if(result.getContents().startsWith("http://") == true){
+                Intent intencao = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getContents().toLowerCase()));
+                startActivity(intencao);
+            } else{
+                    //Em caso positivo, vamos tratar o resultado
                 try{
                     //Aqui, a string lida no QRCode e convertida em um objeto JSON
                     JSONObject obj = new JSONObject(result.getContents());
