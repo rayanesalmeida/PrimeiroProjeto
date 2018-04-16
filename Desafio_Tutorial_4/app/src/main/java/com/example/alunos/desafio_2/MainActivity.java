@@ -98,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 break;
                 case Reset:
-                    num = r.nextInt(10) +1;
+                    //num = r.nextInt(10) +1;
+                    num = 10;
                     tentativas = 0;
                     resposta.setText("");
                     btnAdiv.setText(getResources().getString(R.string.lblButton));
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         userInput.setText("");
     }
 
-    public void placar(){
+    public void placar(View v){
         Intent intent = new Intent(getApplicationContext(), Placar.class);
         Bundle bundle = new Bundle();
         bundle.putInt(getResources().getString(R.string.highestScoreKey), highestScore);

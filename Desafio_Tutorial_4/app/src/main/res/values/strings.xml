@@ -5,5 +5,5 @@
     <string name="historicoKey"> historico </string>
     <string name="lblButtonJogado"> Reiniciar </string>
     <string name="lblButton"> Jogar </string>
-    <string name="lblHighest"> RANKIGN, %d </string>
+    <string name="lblHighest"> RANKIGN: %d </string>
 </resources>

@@ -25,10 +25,10 @@ public class Placar extends AppCompatActivity {
         txtPlacar.setText(getResources().getString(R.string.lblHighest, (highestScore)));
 
         TextView h0 = findViewById(R.id.hist0);
-        TextView h1 = findViewById(R.id.hist0);
-        TextView h2 = findViewById(R.id.hist1);
-        TextView h3 = findViewById(R.id.hist2);
-        TextView h4 = findViewById(R.id.hist3);
+        TextView h1 = findViewById(R.id.hist1);
+        TextView h2 = findViewById(R.id.hist2);
+        TextView h3 = findViewById(R.id.hist3);
+        TextView h4 = findViewById(R.id.hist4);
 
         h0.setText(hist[0]);
         h1.setText(hist[1]);

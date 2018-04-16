@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hist0" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPlacar" />
 
     <TextView
         android:id="@+id/hist1"
@@ -40,7 +40,7 @@
         android:id="@+id/hist2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/hist4"
+        app:layout_constraintBottom_toTopOf="@+id/hist3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
